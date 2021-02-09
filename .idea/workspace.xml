@@ -2,6 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="400d7fd2-351c-4900-aa38-eb11c806a2b2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/sonarIssues.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/sonarlint.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sonar-project.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/workflows/build.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint-state.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint-state.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/0/8/08228262215b0b43eabf21c686b21481d0c0a66e" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/1/1/119f01f8d977af0e1fd41fda524322de194dde60" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/2/924f089edb4af5ee45c8a9d1129cd28e2b368138" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/b/9b91effbed955a444ec11c1346fc8b67221cf9e0" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -39,7 +50,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1nbwNeGcVV9L2hLlCW7O3ZxwfCY" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -50,13 +61,14 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="projectSettingsConfigurable" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RunManager">
     <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
@@ -97,25 +109,31 @@
       <workItem from="1612858738005" duration="300000" />
       <workItem from="1612859060155" duration="1250000" />
       <workItem from="1612860538589" duration="764000" />
+      <workItem from="1612861912780" duration="323000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/.." />
+    </ignored-roots>
+  </component>
   <component name="WindowStateProjectService">
-    <state x="352" y="10" key="#Project_Settings" timestamp="1612860352209">
+    <state x="352" y="10" key="#Project_Settings" timestamp="1612862007424">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="352" y="10" key="#Project_Settings/-1920.1.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1612860352209" />
+    <state x="352" y="10" key="#Project_Settings/-1920.1.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1612862007424" />
     <state x="352" y="10" key="#Project_Structure" timestamp="1611675223137">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="352" y="10" key="#Project_Structure/-1366.0.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1611675223137" />
-    <state x="352" y="10" key="#SonarLint" timestamp="1612860351879">
+    <state x="352" y="10" key="#SonarLint" timestamp="1612861989424">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="352" y="10" key="#SonarLint/-1920.1.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1612860351879" />
+    <state x="352" y="10" key="#SonarLint/-1920.1.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1612861989424" />
     <state x="414" y="148" width="1108" height="815" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1611675235149">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -168,11 +186,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1853" height="110" key="GridCell.Tab.1.right/-1366.0.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1611695598827" />
-    <state x="184" y="0" key="SettingsEditor" timestamp="1612859873255">
+    <state x="184" y="0" key="SettingsEditor" timestamp="1612861924518">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="184" y="0" key="SettingsEditor/-1366.0.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1611695256394" />
-    <state x="184" y="0" key="SettingsEditor/-1920.1.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1612859873255" />
+    <state x="184" y="0" key="SettingsEditor/-1920.1.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1612861924518" />
     <state x="689" y="338" key="classpath-attribute-editor" timestamp="1611695251154">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -187,9 +205,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="0" y="0" width="894" height="1040" key="find.popup/-1920.1.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1612860426921" />
-    <state x="380" y="204" key="org.sonarlint.intellij.config.global.wizard.ServerConnectionWizard$ServerConnectionWizardEx" timestamp="1612860351194">
+    <state x="380" y="204" key="org.sonarlint.intellij.config.global.wizard.ServerConnectionWizard$ServerConnectionWizardEx" timestamp="1612861982426">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="380" y="204" key="org.sonarlint.intellij.config.global.wizard.ServerConnectionWizard$ServerConnectionWizardEx/-1920.1.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1612860351194" />
+    <state x="380" y="204" key="org.sonarlint.intellij.config.global.wizard.ServerConnectionWizard$ServerConnectionWizardEx/-1920.1.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1612861982426" />
   </component>
 </project>
