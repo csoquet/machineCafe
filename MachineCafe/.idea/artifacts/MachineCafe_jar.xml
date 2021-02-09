@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="MachineCafe:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/MachineCafe_jar</output-path>
+    <root id="archive" name="MachineCafe.jar">
+      <element id="module-output" name="MachineCafe" />
+    </root>
+  </artifact>
+</component>
