@@ -11,7 +11,7 @@ public class Boisson {
     ArrayList<Ingredient> ingredients;
 
 
-    public Boisson(String nom, int prix, int nbCafe, int nbLait, int nbChocolat, int nbSucre) {
+    public Boisson(String nom, int prix, int nbCafe, int nbLait, int nbChocolat, int nbSucre, int nbThe) {
         this.nom = nom;
         this.prix = prix;
         ingredients = new ArrayList<Ingredient>();
@@ -19,10 +19,12 @@ public class Boisson {
         Ingredient lait = new Ingredient(Ingredient.NomIngredient.lait, nbLait);
         Ingredient sucre = new Ingredient(Ingredient.NomIngredient.sucre, nbSucre);
         Ingredient chocolat = new Ingredient(Ingredient.NomIngredient.chocolat, nbChocolat);
+        Ingredient the = new Ingredient(Ingredient.NomIngredient.the, nbThe);
         ingredients.add(cafe);
         ingredients.add(lait);
         ingredients.add(sucre);
         ingredients.add(chocolat);
+        ingredients.add(the);
 
     }
 

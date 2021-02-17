@@ -4,13 +4,18 @@ public class Ingredient {
         lait,
         sucre,
         chocolat,
-        cafe;
+        cafe,
+        the;
 
     }
 
     private NomIngredient nom;
 
     private int stock;
+
+    public Ingredient(NomIngredient nom) {
+        this.nom = nom;
+    }
 
     public Ingredient(NomIngredient nom, int stock) {
         this.nom = nom;

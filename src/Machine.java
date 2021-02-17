@@ -1,4 +1,5 @@
-import java.io.IOException;
+import java.io.*;
+import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -13,18 +14,42 @@ public class Machine {
     Scanner s=new Scanner(System.in);
 
     public Machine() {
-        listeBoisson = new ArrayList<Boisson>(3);
+        listeBoisson = new ArrayList<Boisson>(5);
         listeIngredientsTotal = new ArrayList<>();
-        Ingredient cafe = new Ingredient(Ingredient.NomIngredient.cafe, 0);
-        Ingredient lait = new Ingredient(Ingredient.NomIngredient.lait, 0);
-        Ingredient sucre = new Ingredient(Ingredient.NomIngredient.sucre, 0);
-        Ingredient chocolat = new Ingredient(Ingredient.NomIngredient.chocolat, 0);
+        Ingredient cafe = new Ingredient(Ingredient.NomIngredient.cafe);
+        Ingredient lait = new Ingredient(Ingredient.NomIngredient.lait);
+        Ingredient sucre = new Ingredient(Ingredient.NomIngredient.sucre);
+        Ingredient chocolat = new Ingredient(Ingredient.NomIngredient.chocolat);
+        Ingredient the = new Ingredient(Ingredient.NomIngredient.the);
         listeIngredientsTotal.add(cafe);
         listeIngredientsTotal.add(lait);
         listeIngredientsTotal.add(sucre);
         listeIngredientsTotal.add(chocolat);
-    }
+        listeIngredientsTotal.add(the);
+        BufferedReader in = null;
+        try {
+            in = new BufferedReader(new FileReader("stocks.txt"));
+            String line;
+            final String SEPARATEUR = ",";
+            String[] mots;
+            while ((line = in.readLine()) != null)
+            {
+                mots = line.split(SEPARATEUR);
+                for(Ingredient e : listeIngredientsTotal){
+                    String nom = String.valueOf(e.getNom());
+                    if(mots[0].equals(nom)){
+                        e.setStock(Integer.parseInt(mots[1]));
+                    }
+                }
+            }
+            in.close();
+        } catch (FileNotFoundException e) {
+            System.err.println("Premier lancement de la machine, initialisation des stocks à 0");
+        } catch (IOException e) {
 
+        }
+
+    }
 
     public void menu() {
             Scanner s=new Scanner(System.in);
@@ -42,29 +67,26 @@ public class Machine {
                 choix = s.nextLine();
                 switch (choix) {
                     case "1":
-                        if (listeBoisson.size() <= 0) {
-                            System.out.println("Il n'y a pas de boissons dans la machine");
+                        if (pasDeBoisson()) {
                             break;
                         }
                         acheterBoisson();
                         break;
                     case "2":
-                        if (listeBoisson.size() == 3) {
-                            System.out.println("Impossible d'ajouter une boisson, il y en a déjà 3");
+                        if(listeBoisson.size() == 5){
+                            System.err.println("Impossible d'ajouter une nouvelle boisson");
                             break;
                         }
                         ajouterBoisson();
                         break;
                     case "3":
-                        if (listeBoisson.size() <= 0) {
-                            System.out.println("Il n'y a pas de boissons dans la machine");
+                        if (pasDeBoisson()) {
                             break;
                         }
                         modifierCompositionBoisson();
                         break;
                     case "4":
-                        if (listeBoisson.size() <= 0) {
-                            System.out.println("Il n'y a pas de boissons dans la machine");
+                        if (pasDeBoisson()) {
                             break;
                         }
                         supprimerBoisson();
@@ -77,9 +99,13 @@ public class Machine {
                         break;
                     case "8":
                         rester = false;
+                        enregistrerStock();
                         s.close();
                         break;
                     case "7":
+                        if (pasDeBoisson()) {
+                            break;
+                        }
                         afficherBoisson();
                         break;
                     default:
@@ -90,6 +116,13 @@ public class Machine {
             System.out.println("A bientot !");
     }
 
+    public boolean pasDeBoisson(){
+        if (listeBoisson.isEmpty()) {
+            System.err.println("Il n'y a pas de boissons dans la machine");
+            return true;
+        }
+        return false;
+    }
 
     public void acheterBoisson(){
         Scanner s=new Scanner(System.in);
@@ -97,78 +130,128 @@ public class Machine {
         int choix;
         System.out.println("Choisissez la boisson que vous voulez (donner le numéro)?");
         if(s.hasNextInt()){
-            choix=Integer.parseInt(s.nextLine());
-            Boisson choisi = listeBoisson.get(choix);
-            System.out.println("Vous avez sélectionné la boisson " + choisi.getNom() + ", elle coûte " + choisi.getPrix() + " €");
-            System.out.println("Veuillez insérer votre monnaie");
-            int monnaie;
-            monnaie=Integer.parseInt(s.nextLine());
-            while(monnaie < choisi.getPrix()){
-                System.out.println("");
-                System.out.println("Vous n'avez pas mis assez de monnaie pour la boisson");
-                System.out.println("Votre monnaie vous est rendue : " + monnaie + " €");
-                System.out.println("");
+            try{
+                choix=Integer.parseInt(s.nextLine());
+                Boisson choisi = listeBoisson.get(choix);
                 System.out.println("Vous avez sélectionné la boisson " + choisi.getNom() + ", elle coûte " + choisi.getPrix() + " €");
                 System.out.println("Veuillez insérer votre monnaie");
+                int monnaie;
                 monnaie=Integer.parseInt(s.nextLine());
-            }
-            int solde = 0;
-            if(monnaie > choisi.getPrix()){
-                solde = monnaie - choisi.getPrix();
-            }
-            boolean suffisant = true;
-            for(Ingredient e : choisi.getIngredients()){
-                for(Ingredient p : listeIngredientsTotal){
-                    if(p.getNom().equals(e.getNom())){
-                        if(p.getStock() < e.getStock()){
-                            suffisant = false;
-                            break;
-                        }
-                    }
-
+                while(monnaie < choisi.getPrix()){
+                    System.out.println("");
+                    System.out.println("Vous n'avez pas mis assez de monnaie pour la boisson");
+                    System.out.println("Votre monnaie vous est rendue : " + monnaie + " €");
+                    System.out.println("");
+                    System.out.println("Vous avez sélectionné la boisson " + choisi.getNom() + ", elle coûte " + choisi.getPrix() + " €");
+                    System.out.println("Veuillez insérer votre monnaie");
+                    monnaie=Integer.parseInt(s.nextLine());
                 }
-            }
-
-            if(!suffisant){
-                System.out.println("-----------------------------------------------------------");
-                System.out.println("Il n'y a pas assez d'ingrédients pour vous fournir la boisson");
-                System.out.println("Votre monnaie vous est rendue : " + monnaie + " €");
-                System.out.println("-----------------------------------------------------------");
-            }
-            else
-            {
+                int solde = 0;
+                if(monnaie > choisi.getPrix()){
+                    solde = monnaie - choisi.getPrix();
+                }
+                boolean suffisant = true;
                 for(Ingredient e : choisi.getIngredients()){
                     for(Ingredient p : listeIngredientsTotal){
                         if(p.getNom().equals(e.getNom())){
-                            p.setStock(p.getStock()-e.getStock());
+                            if(p.getStock() < e.getStock()){
+                                suffisant = false;
+                                break;
+                            }
                         }
 
                     }
                 }
-                System.out.println("-----------------------------------------------------------");
-                System.out.println("Votre boisson " + choisi.getNom() + " est en cours de préparation");
-                for (int i = 0; i <= 100; i = i + 20) {
-                    progressPercentage(i, 100);
-                    try {
-                        Thread.sleep(500);
-                    } catch (Exception e) {
+
+                if(!suffisant){
+                    System.out.println("-----------------------------------------------------------");
+                    System.out.println("Il n'y a pas assez d'ingrédients pour vous fournir la boisson");
+                    System.out.println("Votre monnaie vous est rendue : " + monnaie + " €");
+                    System.out.println("-----------------------------------------------------------");
+                }
+                else
+                {
+                    String reponse;
+                    System.out.println("Voulez-vous modifier la composition du sucre ? (O/N)");
+                    reponse=s.nextLine();
+                    while(!(reponse.equals("O") || reponse.equals("N"))){
+                        System.out.println("Voulez-vous modifier la composition du sucre ? (O/N)");
+                        reponse=s.nextLine();
+                    }
+                    int nbSucreAncien = 0;
+                    if(reponse.equals("O")){
+                       nbSucreAncien = modifSucre(choisi);
+                    }
+                    for(Ingredient e : choisi.getIngredients()){
+                        for(Ingredient p : listeIngredientsTotal){
+                            if(p.getNom().equals(e.getNom())){
+                                p.setStock(p.getStock()-e.getStock());
+                            }
+
+                        }
+                    }
+                    System.out.println("-----------------------------------------------------------");
+                    System.out.println("Votre boisson " + choisi.getNom() + " est en cours de préparation");
+                    for (int i = 0; i <= 100; i = i + 20) {
+                        progressPercentage(i, 100);
+                        try {
+                            Thread.sleep(500);
+                        } catch (Exception e) {
+                        }
+                    }
+
+                    System.out.println("-----------------------------------------------------------");
+                    System.out.println("Votre boisson " + choisi.getNom() + " est prête");
+                    if(solde != 0){
+                        System.out.println("Votre monnaie vous est rendue : " + solde + " €");
+                    }
+                    System.out.println("-----------------------------------------------------------");
+
+                    if(reponse.equals("O")){
+                        for(Ingredient e : choisi.getIngredients()){
+                            if(e.getNom().equals(Ingredient.NomIngredient.sucre)){
+                                e.setStock(nbSucreAncien);
+                            }
+                        }
                     }
                 }
 
-                System.out.println("-----------------------------------------------------------");
-                System.out.println("Votre boisson " + choisi.getNom() + " est prête");
-                if(solde != 0){
-                    System.out.println("Votre monnaie vous est rendue : " + solde + " €");
-                }
-                System.out.println("-----------------------------------------------------------");
+            } catch(Exception e){
+                System.err.println("Veuillez rentrer un numéro valide");
             }
 
         }
         else{
-            System.out.println("Veuillez rentrer un numéro");
+            System.err.println("Veuillez rentrer un numéro valide");
         }
+    }
 
+    public int modifSucre(Boisson b){
+        int nbSucreAncien = 0;
+        for(Ingredient e : b.getIngredients()){
+            if(e.getNom().equals(Ingredient.NomIngredient.sucre)){
+                nbSucreAncien = e.getStock();
+            }
+        }
+        Scanner s=new Scanner(System.in);
+        int nbSucre = 0;
+        System.out.println("Votre boisson est à " + nbSucreAncien + " sucres. A combien voulez vous le modifier ?");
+        while(!s.hasNextInt()){
+            System.err.println("Veuillez rentrer une valeur valide !");
+            s=new Scanner(System.in);
+            System.out.println("Votre boisson est à " + nbSucreAncien + " sucres. A combien voulez vous le modifier ?");
+        }
+            nbSucre = Integer.parseInt(s.nextLine());
 
+        for(Ingredient e : b.getIngredients()){
+            if(e.getNom().equals(Ingredient.NomIngredient.sucre)){
+                e.setStock(nbSucre);
+            }
+        }
+        System.out.println("");
+        System.out.println("Le nombre d'unités de sucre à bien été modifier, c'est passer de  " + nbSucreAncien + " à " + nbSucre + " " );
+        System.out.println("");
+        return nbSucreAncien;
     }
 
     public static void progressPercentage(int remain, int total) {
@@ -204,7 +287,7 @@ public class Machine {
             for (Boisson b : listeBoisson) {
                 if (b.getNom().equals(nom)) {
                     existe = true;
-                    System.out.println("Cette boisson existe déjà");
+                    System.err.println("Cette boisson existe déjà");
                     break;
                 }
             }
@@ -263,13 +346,23 @@ public class Machine {
                 else{
                     nbSucre = test;
                 }
+                int nbThe=0;
+                System.out.println("Donner le nombre de quantité de thé présent dans cette boisson");
+                test = s.nextInt();
+                if(test < 0){
+                    nbThe=abs(test);
+                    System.out.println("Conversion de votre nombre négatif en positif");
+                }
+                else{
+                    nbThe = test;
+                }
 
-                if(nbSucre >= 0 & nbChocolat == 0 & nbLait == 0 & nbCafe == 0){
+                if(nbSucre >= 0 && nbChocolat == 0 && nbLait == 0 && nbCafe == 0 && nbThe == 0){
                     System.out.println("Impossible de créer cette boisson");
                 }
 
                 else{
-                    Boisson b = new Boisson(nom, prix, nbCafe, nbLait, nbChocolat, nbSucre);
+                    Boisson b = new Boisson(nom, prix, nbCafe, nbLait, nbChocolat, nbSucre, nbThe);
                     listeBoisson.add(b);
                     System.out.println("");
                     System.out.println("L'ajout de votre boisson " + nom + " s'est déroulé correctement");
@@ -277,11 +370,11 @@ public class Machine {
                 }
             }
             catch(Exception e){
-                System.out.println("Entrer une valeur numérique s'il vous plait. \n");
+                System.err.println("Veuillez entrer un nombre valide s'il vous plait ! \n");
             }
         }
         else{
-            System.out.println("Entrer une valeur numérique s'il vous plait \n");
+            System.err.println("Veuillez entrer un nombre valide s'il vous plait ! \n");
         }
 
     }
@@ -304,6 +397,7 @@ public class Machine {
             System.out.println("2. Modifier le nombre d'unités de lait");
             System.out.println("3. Modifier le nombre d'unités de chocolat");
             System.out.println("4. Modifier le nombre d'unités de sucre");
+            System.out.println("5. Modifier le nombre d'unités de the");
             choisir = s.nextInt();
             switch (choisir) {
                 case 1:
@@ -332,7 +426,7 @@ public class Machine {
                         }
                     }
                     System.out.println("");
-                    System.out.println("Le nombre d'unités de café à bien été modifier, c'est passer de  " + nbLaitAncien + " à " + nbLait + " " );
+                    System.out.println("Le nombre d'unités de lait à bien été modifier, c'est passer de  " + nbLaitAncien + " à " + nbLait + " " );
                     break;
                 case 3:
                     int nbChocolat;
@@ -346,7 +440,7 @@ public class Machine {
                         }
                     }
                     System.out.println("");
-                    System.out.println("Le nombre d'unités de café à bien été modifier, c'est passer de  " + nbChocolatAncien + " à " + nbChocolat + " " );
+                    System.out.println("Le nombre d'unités de chocolat à bien été modifier, c'est passer de  " + nbChocolatAncien + " à " + nbChocolat + " " );
                     break;
                 case 4:
                     int nbSucre;
@@ -360,14 +454,28 @@ public class Machine {
                         }
                     }
                     System.out.println("");
-                    System.out.println("Le nombre d'unités de café à bien été modifier, c'est passer de  " + nbSucreAncien + " à " + nbSucre + " " );
+                    System.out.println("Le nombre d'unités de sucre à bien été modifier, c'est passer de  " + nbSucreAncien + " à " + nbSucre + " " );
+                    break;
+                case 5:
+                    int nbThe;
+                    int nbTheAncien = 0;
+                    System.out.println("Quel est le nouveau nombre d'unités de the ?");
+                    nbThe = s.nextInt();
+                    for(Ingredient e : boissonChoisi.getIngredients()){
+                        if(e.getNom().equals(Ingredient.NomIngredient.the)){
+                            nbTheAncien = e.getStock();
+                            e.setStock(nbThe);
+                        }
+                    }
+                    System.out.println("");
+                    System.out.println("Le nombre d'unités de the à bien été modifier, c'est passer de  " + nbTheAncien + " à " + nbThe + " " );
                     break;
             }
 
             System.out.println("-----------------------------------------------------------");
         }
         catch (Exception e){
-            System.out.println("Il faut entrer un numéro s'il vous plait");
+            System.err.println("Il faut entrer un numéro valide s'il vous plait");
         }
 
 
@@ -376,16 +484,20 @@ public class Machine {
     }
 
     public void supprimerBoisson(){
-        Scanner s=new Scanner(System.in);
-        afficherBoisson();
-        int choix;
-        System.out.println("Choisissez la boisson que vous voulez supprimer?(donner le numéro)");
-        choix=Integer.parseInt(s.nextLine());
-        String nom = listeBoisson.get(choix).getNom();
-        listeBoisson.remove(choix);
-        System.out.println("");
-        System.out.println("La suppression de la boisson " + nom + " s'est déroulé correctement");
-        System.out.println("-----------------------------------------------------------");
+        try {
+            Scanner s = new Scanner(System.in);
+            afficherBoisson();
+            int choix;
+            System.out.println("Choisissez la boisson que vous voulez supprimer?(donner le numéro)");
+            choix = Integer.parseInt(s.nextLine());
+            String nom = listeBoisson.get(choix).getNom();
+            listeBoisson.remove(choix);
+            System.out.println("");
+            System.out.println("La suppression de la boisson " + nom + " s'est déroulé correctement");
+            System.out.println("-----------------------------------------------------------");
+        } catch (Exception e){
+            System.err.println("Veuillez entrer un nombre valide s'il vous plait !");
+        }
     }
 
     public void afficherStock(){
@@ -397,21 +509,25 @@ public class Machine {
     }
 
     public void ajouterQuantiteStock(){
-        Scanner s=new Scanner(System.in);
-        afficherStock();
-        int choix;
-        System.out.println("Choisissez l'ingrédient ou vous voulez ajouter du stock (donner le numéro)");
-        choix=Integer.parseInt(s.nextLine());
-        System.out.println(listeIngredientsTotal.get(choix).getNom() + " - Stock disponible : " + listeIngredientsTotal.get(choix).getStock());
-        int stockPrecedent = listeIngredientsTotal.get(choix).getStock();
-        int stock;
-        System.out.println("Renseigner le stock pour cet ingrédient : ");
-        stock=Integer.parseInt(s.nextLine());
-        listeIngredientsTotal.get(choix).setStock(stock);
-        System.out.println("");
-        System.out.println("La mise à jour du stock de " + listeIngredientsTotal.get(choix).getNom() + " s'est déroulé correctement");
-        System.out.println("Le stock est bien passé de " + stockPrecedent + " a " + stock);
-        System.out.println("-----------------------------------------------------------");
+        try {
+            Scanner s = new Scanner(System.in);
+            afficherStock();
+            int choix;
+            System.out.println("Choisissez l'ingrédient ou vous voulez ajouter du stock (donner le numéro)");
+            choix = Integer.parseInt(s.nextLine());
+            System.out.println(listeIngredientsTotal.get(choix).getNom() + " - Stock disponible : " + listeIngredientsTotal.get(choix).getStock());
+            int stockPrecedent = listeIngredientsTotal.get(choix).getStock();
+            int stock;
+            System.out.println("Renseigner le stock pour cet ingrédient : ");
+            stock = Integer.parseInt(s.nextLine());
+            listeIngredientsTotal.get(choix).setStock(stock);
+            System.out.println("");
+            System.out.println("La mise à jour du stock de " + listeIngredientsTotal.get(choix).getNom() + " s'est déroulé correctement");
+            System.out.println("Le stock est bien passé de " + stockPrecedent + " a " + stock);
+            System.out.println("-----------------------------------------------------------");
+        } catch(Exception e){
+            System.err.println("Veuillez rentrer un nombre valide s'il vous plait !");
+        }
 
     }
 
@@ -438,6 +554,7 @@ public class Machine {
         int nbLait = 0;
         int nbChocolat = 0;
         int nbSucre = 0;
+        int nbThe = 0;
         for(Ingredient e: b.getIngredients()){
             if(e.getNom().equals(Ingredient.NomIngredient.cafe)){
                nbCafe = e.getStock();
@@ -451,10 +568,29 @@ public class Machine {
             if(e.getNom().equals(Ingredient.NomIngredient.sucre)){
                 nbSucre = e.getStock();
             }
+            if(e.getNom().equals(Ingredient.NomIngredient.the)){
+                nbThe = e.getStock();
+            }
         }
         System.out.println(b.getNom() + " Prix de la boisson : " + b.getPrix() + " €");
-        System.out.println("Nb café " + nbCafe + " - Nb lait " + nbLait + " - Nb chocolat " + nbChocolat + " - Nb Sucre " + nbSucre);
+        System.out.println("Nb café " + nbCafe + " - Nb lait " + nbLait + " - Nb chocolat " + nbChocolat + " - Nb Sucre " + nbSucre + " - Nb The " + nbThe);
         System.out.println("-----------------------------------------------------------");
+
+    }
+
+    public void enregistrerStock(){
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("stocks.txt", "UTF-8");
+            for(Ingredient e : listeIngredientsTotal){
+                writer.println(e.getNom()+","+e.getStock());
+            }
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
     }
 
